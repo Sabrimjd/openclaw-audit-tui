@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from "react";
 import type { AuditEntry, EntryTypeFilter, FilterState } from "../types";
-import { getToolCategory } from "../lib/utils";
+import { fuzzyMatch, getToolCategory } from "../lib/utils";
 
 export interface AdvancedFilterState {
   toolCategory: "all" | "file" | "search" | "exec" | "web" | "subagent" | "mcp" | "other";
@@ -53,13 +53,13 @@ export function useFilter(entries: AuditEntry[]) {
             .map((b) => (b as any).text || "")
             .join(" ")
             .toLowerCase();
-          if (textContent.includes(query)) return true;
+          if (fuzzyMatch(textContent, query)) return true;
 
           // Also search in tool names
           const toolCalls = entry.message.content
             .filter((b) => b.type === "toolCall")
             .map((b) => (b as any).name || "");
-          if (toolCalls.some((name) => name.toLowerCase().includes(query))) {
+          if (toolCalls.some((name) => fuzzyMatch(name.toLowerCase(), query))) {
             return true;
           }
         }
@@ -106,11 +106,11 @@ export function useFilter(entries: AuditEntry[]) {
         if (entry.type !== "message") return false;
         if (entry.message.role === "assistant") {
           return entry.message.content.some(
-            (block) => block.type === "toolCall" && block.name.toLowerCase().includes(toolNeedle)
+            (block) => block.type === "toolCall" && fuzzyMatch(block.name.toLowerCase(), toolNeedle)
           );
         }
         if (entry.message.role === "toolResult") {
-          return (entry.message.toolName ?? "").toLowerCase().includes(toolNeedle);
+          return fuzzyMatch((entry.message.toolName ?? "").toLowerCase(), toolNeedle);
         }
         return false;
       });

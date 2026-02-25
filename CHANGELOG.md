@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.1.5] - 2026-02-25
+
+### Fixed
+- Synced header version display with `package.json` version.
+- Improved all-view live updates: forced event reload polling every 3s while in All View.
+- Fixed preload race conditions that could leave all-view stale until restart.
+
+### Changed
+- Search/filter matching now supports fuzzy matching for command palette, entries, tool-name filters, and all-events text query.
+
 ## [0.1.4] - 2026-02-25
 
 ### Fixed

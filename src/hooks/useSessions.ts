@@ -18,6 +18,7 @@ export function useSessions() {
   const [allEvents, setAllEvents] = useState<GlobalEventEntry[]>([]);
   const [allEventsLoading, setAllEventsLoading] = useState(false);
   const allEventsLoadedRef = useRef(false);
+  const isPreloadingRef = useRef(false);
 
   // Load all agents and sessions on mount
   useEffect(() => {
@@ -55,17 +56,20 @@ export function useSessions() {
   }, []);
 
   // Preload all events in background (non-blocking)
-  const preloadAllEvents = useCallback(async (sessionList: SessionSummary[]) => {
-    if (allEventsLoadedRef.current) return;
+  const preloadAllEvents = useCallback(async (sessionList: SessionSummary[], force = false) => {
+    if (isPreloadingRef.current) return;
+    if (!force && allEventsLoadedRef.current) return;
     if (sessionList.length === 0) return;
 
+    isPreloadingRef.current = true;
     setAllEventsLoading(true);
 
-    // Load in chunks to avoid blocking
-    const events: GlobalEventEntry[] = [];
+    try {
+      // Load in chunks to avoid blocking
+      const events: GlobalEventEntry[] = [];
 
-    for (const session of sessionList) {
-      try {
+      for (const session of sessionList) {
+        try {
           const fullSession = await loadSession(session.agentName, session.filePath);
           if (fullSession) {
             for (const entry of fullSession.entries) {
@@ -79,21 +83,24 @@ export function useSessions() {
               });
             }
           }
-      } catch {
-        // Skip sessions that fail to load
+        } catch {
+          // Skip sessions that fail to load
+        }
       }
+
+      // Sort by timestamp (most recent first)
+      events.sort((a, b) => {
+        const timeA = new Date(a.entry.timestamp).getTime();
+        const timeB = new Date(b.entry.timestamp).getTime();
+        return timeB - timeA;
+      });
+
+      setAllEvents(events);
+      allEventsLoadedRef.current = true;
+    } finally {
+      setAllEventsLoading(false);
+      isPreloadingRef.current = false;
     }
-
-    // Sort by timestamp (most recent first)
-    events.sort((a, b) => {
-      const timeA = new Date(a.entry.timestamp).getTime();
-      const timeB = new Date(b.entry.timestamp).getTime();
-      return timeB - timeA;
-    });
-
-    setAllEvents(events);
-    setAllEventsLoading(false);
-    allEventsLoadedRef.current = true;
   }, []);
 
   // Load a specific session
@@ -128,36 +135,52 @@ export function useSessions() {
       ]);
 
       setAgents(loadedAgents);
-      setSessions(
-        loadedSessions.sort(
-          (a, b) => {
-            const aTime = a.lastActivity?.getTime?.() ?? a.timestamp.getTime();
-            const bTime = b.lastActivity?.getTime?.() ?? b.timestamp.getTime();
-            return bTime - aTime;
-          }
-        )
+      const sortedSessions = loadedSessions.sort(
+        (a, b) => {
+          const aTime = a.lastActivity?.getTime?.() ?? a.timestamp.getTime();
+          const bTime = b.lastActivity?.getTime?.() ?? b.timestamp.getTime();
+          return bTime - aTime;
+        }
       );
+      setSessions(sortedSessions);
+
+      // Refresh all-events cache too
+      allEventsLoadedRef.current = false;
+      setAllEvents([]);
+      await preloadAllEvents(sortedSessions, true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to refresh");
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [preloadAllEvents]);
+
+  // Lightweight polling for all-events view (tail -f style updates)
+  const pollAllEvents = useCallback(async () => {
+    try {
+      const loadedSessions = await getAllSessionSummaries();
+      const sortedSessions = loadedSessions.sort((a, b) => {
+        const aTime = a.lastActivity?.getTime?.() ?? a.timestamp.getTime();
+        const bTime = b.lastActivity?.getTime?.() ?? b.timestamp.getTime();
+        return bTime - aTime;
+      });
+
+      setSessions(sortedSessions);
+      allEventsLoadedRef.current = false;
+      await preloadAllEvents(sortedSessions, true);
+    } catch {
+      // Keep current data on polling failures
+    }
+  }, [preloadAllEvents]);
 
   // Load all events from all sessions (uses cache if available)
   const loadAllEvents = useCallback(async () => {
-    // If already loaded, just return
-    if (allEventsLoadedRef.current && allEvents.length > 0) {
-      return;
-    }
-
     if (sessions.length === 0) {
       return;
     }
 
-    // Otherwise load now
-    await preloadAllEvents(sessions);
-  }, [sessions, allEvents.length, preloadAllEvents]);
+    await preloadAllEvents(sessions, true);
+  }, [sessions, preloadAllEvents]);
 
   return {
     agents,
@@ -168,6 +191,7 @@ export function useSessions() {
     selectSession,
     clearSession,
     refresh,
+    pollAllEvents,
     allEvents,
     allEventsLoading,
     loadAllEvents,

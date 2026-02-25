@@ -45,6 +45,19 @@ export function truncateText(text: string, maxLength: number): string {
   return text.slice(0, maxLength - 3) + "...";
 }
 
+export function fuzzyMatch(haystack: string, needle: string): boolean {
+  const h = haystack.toLowerCase();
+  const n = needle.trim().toLowerCase();
+  if (!n) return true;
+  if (h.includes(n)) return true;
+
+  let j = 0;
+  for (let i = 0; i < h.length && j < n.length; i += 1) {
+    if (h[i] === n[j]) j += 1;
+  }
+  return j === n.length;
+}
+
 export function getToolCategory(toolName: string): import("../types").ToolCategory {
   const normalized = toolName.toLowerCase();
 

@@ -17,7 +17,7 @@ import {
   type AdvancedAllEventsFilter,
   type AdvancedEntryFilter,
 } from "./components/AdvancedFilterModal";
-import { getToolCategory } from "./lib/utils";
+import { fuzzyMatch, getToolCategory } from "./lib/utils";
 
 type View = "sessions" | "entries" | "all-events";
 const HISTOGRAM_BUCKET_OPTIONS = [24, 52, 96] as const;
@@ -116,6 +116,7 @@ export function App() {
     selectSession,
     clearSession,
     refresh,
+    pollAllEvents,
     allEvents,
     allEventsLoading,
     loadAllEvents,
@@ -210,7 +211,7 @@ export function App() {
         }
       }
 
-      if (query && !eventSearchText(event).includes(query)) {
+      if (query && !fuzzyMatch(eventSearchText(event), query)) {
         return false;
       }
 
@@ -347,7 +348,7 @@ export function App() {
     if (!q) return baseCommands;
     return baseCommands.filter((command) => {
       const hay = `${command.title} ${command.subtitle ?? ""}`.toLowerCase();
-      return hay.includes(q);
+      return fuzzyMatch(hay, q);
     });
   }, [baseCommands, paletteQuery]);
 
@@ -652,6 +653,15 @@ export function App() {
       void loadAllEvents();
     }
   }, [view, allEventsLoading, allEvents.length, loadAllEvents]);
+
+  useEffect(() => {
+    if (view !== "all-events") return;
+    void pollAllEvents();
+    const interval = setInterval(() => {
+      void pollAllEvents();
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [view, pollAllEvents]);
 
   const handleSelectSession = useCallback(
     (session: SessionSummary) => {

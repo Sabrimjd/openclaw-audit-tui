@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { colors } from "../constants/colors";
 import { formatHelpText } from "../constants/keybinds";
+import { APP_VERSION } from "../constants/version";
 
 interface LayoutProps {
   children: ReactNode;
@@ -10,8 +11,6 @@ interface LayoutProps {
   currentView?: "sessions" | "entries" | "all-events";
   focusPanel?: "sidebar" | "content" | "filter";
 }
-
-const VERSION = "0.2.0";
 
 export function Layout({
   children,
@@ -41,7 +40,7 @@ export function Layout({
         paddingRight={1}
         backgroundColor={colors.panelHeaderBg}
       >
-        <text><span fg={colors.textPrimary}>{title} v{VERSION}</span></text>
+        <text><span fg={colors.textPrimary}>{title} v{APP_VERSION}</span></text>
         {subtitle && (
           <text><span fg={colors.textMuted}> | {subtitle}</span></text>
         )}
