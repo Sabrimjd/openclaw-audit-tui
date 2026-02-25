@@ -97,4 +97,4 @@ bun dev
 
 ### NPM publish setup
 
-Set repository secret `NPM_TOKEN` in GitHub Actions for `Sabrimjd/openclaw-audit-tui`.
+Use npm Trusted Publisher (OIDC) with your GitHub repository. No long-lived `NPM_TOKEN` is needed once trusted publishing is configured.
