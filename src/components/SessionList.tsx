@@ -33,7 +33,7 @@ export function SessionList({
         paddingLeft={1}
         backgroundColor={isFocused ? colors.panelHeaderActive : colors.panelHeaderBg}
       >
-        <text><span fg={isFocused ? colors.selectedFg : colors.textSecondary}>{focusIndicator} Sessions ({sessions.length})</span></text>
+        <text><span fg={isFocused ? colors.selectedFg : colors.textSecondary}>{focusIndicator} Tree View ({sessions.length} sessions)</span></text>
       </box>
 
       {/* Table header */}

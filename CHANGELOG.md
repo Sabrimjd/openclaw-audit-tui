@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.1.1] - 2026-02-25
+
+### Changed
+- Default landing view is now `All View` (global events timeline).
+- Previous sessions browser is now named `Tree View`.
+- Added quick keyboard switch back to Tree View from All View (`t`).
+
+### Fixed
+- Simplified advanced filter UX and stabilized keyboard behavior with deterministic field/edit modes.
+- Improved edit/write diff rendering by supporting `old_string`, `newText`, and `file_path` payload shapes.
+
 ## [0.1.0] - 2026-02-25
 
 ### Added

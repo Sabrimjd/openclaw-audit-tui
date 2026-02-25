@@ -22,7 +22,7 @@ export function Layout({
   focusPanel = "content",
 }: LayoutProps) {
   // Build status line showing current navigation state
-  const viewLabel = currentView === "sessions" ? "Sessions" : currentView === "all-events" ? "All Events" : "Entries";
+  const viewLabel = currentView === "sessions" ? "Tree View" : currentView === "all-events" ? "All View" : "Entries";
   const panelLabel =
     focusPanel === "sidebar" ? "[Agents]" : focusPanel === "filter" ? "[Filter]" : "[List]";
   const statusLine = `${viewLabel} > ${panelLabel}`;

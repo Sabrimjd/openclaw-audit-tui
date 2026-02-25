@@ -530,7 +530,7 @@ export function AllEventsViewer({
   const rangeEnd = windowStart + visibleEvents.length;
   const markerIndex = events.length <= 1 ? 0 : Math.round((selectedIndex / (events.length - 1)) * (SPARK_DISPLAY_WIDTH - 1));
 
-  const headerText = `[${isFocused ? "*" : " "}] All Events (${events.length})${loadingIndicator} | showing ${rangeStart}-${rangeEnd}`;
+  const headerText = `[${isFocused ? "*" : " "}] All View (${events.length})${loadingIndicator} | showing ${rangeStart}-${rangeEnd}`;
   const selectedEvent = events[selectedIndex] ?? null;
 
   return (

@@ -121,7 +121,7 @@ export function App() {
     loadAllEvents,
   } = useSessions();
 
-  const [view, setView] = useState<View>("sessions");
+  const [view, setView] = useState<View>("all-events");
   const [focusPanel, setFocusPanel] = useState<FocusPanel>("content");
   const [selectedAgentIndex, setSelectedAgentIndex] = useState(0);
   const [selectedSessionIndex, setSelectedSessionIndex] = useState(0);
@@ -297,13 +297,13 @@ export function App() {
     const commands: PaletteCommand[] = [
       {
         id: "nav-sessions",
-        title: "Go to Sessions",
-        subtitle: "Main sessions list",
+        title: "Go to Tree View",
+        subtitle: "Agent/session tree browser",
         onRun: () => setView("sessions"),
       },
       {
         id: "nav-all-events",
-        title: "Open All Events",
+        title: "Open All View",
         subtitle: "Global timeline and inspector",
         onRun: async () => {
           await loadAllEvents();
@@ -551,11 +551,17 @@ export function App() {
       return;
     }
 
-    if (!isAdvancedFilterOpen && key.name === "a" && view === "sessions") {
+    if (!isAdvancedFilterOpen && key.name === "a" && view !== "all-events") {
       pushSnapshot();
       void loadAllEvents();
       setView("all-events");
       setAllEventsSelectedIndex(0);
+      return;
+    }
+
+    if (!isAdvancedFilterOpen && key.name === "t" && view === "all-events") {
+      pushSnapshot();
+      setView("sessions");
       return;
     }
 
@@ -641,6 +647,12 @@ export function App() {
     setSelectedSessionIndex(0);
   }, [selectedAgentIndex]);
 
+  useEffect(() => {
+    if (view === "all-events" && !allEventsLoading && allEvents.length === 0) {
+      void loadAllEvents();
+    }
+  }, [view, allEventsLoading, allEvents.length, loadAllEvents]);
+
   const handleSelectSession = useCallback(
     (session: SessionSummary) => {
       void openSessionEntries(session, 0);
@@ -663,14 +675,14 @@ export function App() {
 
   const breadcrumbs = useMemo(() => {
     const items: Array<{ label: string; onClick?: () => void }> = [
-      { label: "Sessions", onClick: () => setView("sessions") },
+      { label: "Tree View", onClick: () => setView("sessions") },
     ];
     if (selectedAgent) items.push({ label: selectedAgent.name, onClick: () => setView("sessions") });
     if (view === "entries" && currentSession) {
       items.push({ label: currentSession.id.slice(0, 8) });
     }
     if (view === "all-events") {
-      items.push({ label: "All Events" });
+      items.push({ label: "All View" });
     }
     return items;
   }, [selectedAgent, view, currentSession]);

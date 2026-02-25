@@ -1,6 +1,6 @@
 {
   "name": "openclaw-audit-tui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "OpenClaw audit terminal UI built with OpenTUI",
   "module": "src/index.tsx",
   "type": "module",

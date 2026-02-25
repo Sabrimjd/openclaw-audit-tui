@@ -29,9 +29,9 @@ bun dev
 
 ## Main views
 
-- `Sessions`: browse sessions grouped by agent, sorted by latest activity.
+- `All View` (default): global timeline across sessions with sparkline, scope toggle, and event detail inspector.
+- `Tree View`: browse sessions grouped by agent, sorted by latest activity.
 - `Entries`: inspect full session timelines with rich markdown/json and file diffs for edit/write tools.
-- `All Events`: global timeline across sessions with sparkline, scope toggle, and event detail inspector.
 
 ## Session table metrics
 
@@ -63,8 +63,9 @@ Each session row includes:
 - `Enter`: select/open
 - `Backspace`: go back (navigation stack)
 - `Ctrl+P`: command palette
-- `a`: open All Events
-- `v`: toggle All Events scope (global/agent)
+- `a`: open All View
+- `t`: open Tree View
+- `v`: toggle All View scope (global/agent)
 - `b`: cycle histogram bins
 - `Esc`: back/close
 - `q`: quit
