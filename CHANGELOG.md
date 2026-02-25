@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.1.2] - 2026-02-25
+
+### Fixed
+- Fixed startup race where default `All View` could preload events with an empty session list and remain blank.
+- `All View` loading now waits for sessions before marking event cache as loaded.
+
 ## [0.1.1] - 2026-02-25
 
 ### Changed

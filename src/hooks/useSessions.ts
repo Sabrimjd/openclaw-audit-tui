@@ -57,6 +57,7 @@ export function useSessions() {
   // Preload all events in background (non-blocking)
   const preloadAllEvents = useCallback(async (sessionList: SessionSummary[]) => {
     if (allEventsLoadedRef.current) return;
+    if (sessionList.length === 0) return;
 
     setAllEventsLoading(true);
 
@@ -147,6 +148,10 @@ export function useSessions() {
   const loadAllEvents = useCallback(async () => {
     // If already loaded, just return
     if (allEventsLoadedRef.current && allEvents.length > 0) {
+      return;
+    }
+
+    if (sessions.length === 0) {
       return;
     }
 
