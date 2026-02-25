@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.1.3] - 2026-02-25
+
+### Fixed
+- Updated npm publish workflow to trigger directly on `v*` tag pushes for trusted publishing compatibility.
+
 ## [0.1.2] - 2026-02-25
 
 ### Fixed

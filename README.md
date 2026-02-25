@@ -94,7 +94,7 @@ bun dev
   - install dependencies with Bun
   - typecheck with `bunx tsc --noEmit`
 - Release workflow runs on `v*` tags and creates a GitHub Release.
-- NPM publish workflow runs on GitHub release publish (or manual dispatch) and publishes `openclaw-audit-tui`.
+- NPM publish workflow runs on `v*` tag pushes (or manual dispatch) and publishes `openclaw-audit-tui`.
 
 ### NPM publish setup
 
