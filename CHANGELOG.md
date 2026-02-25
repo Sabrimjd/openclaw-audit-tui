@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.1.4] - 2026-02-25
+
+### Fixed
+- npm trusted publishing workflow now clears `NODE_AUTH_TOKEN` during publish so OIDC flow is used.
+
 ## [0.1.3] - 2026-02-25
 
 ### Fixed
