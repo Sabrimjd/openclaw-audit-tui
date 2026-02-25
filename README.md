@@ -11,7 +11,7 @@
 
 Monitor all OpenClaw session events and stream them to any channel (Discord, Telegram, Slack, etc.) in real-time.
 
-<img src="screenshots/screenshot3.png" width="600px" alt="Openclaw audit Tui" />
+<img src="screenshots/screenshot3.png" width="800px" alt="Openclaw audit Tui" />
 
 
 Terminal UI for auditing OpenClaw sessions, events, tool usage, and model behavior.
