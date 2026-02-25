@@ -13,6 +13,13 @@ bun add -g openclaw-audit-tui
 openclaw-audit-tui
 ```
 
+Global install (npm):
+
+```bash
+npm install -g openclaw-audit-tui
+openclaw-audit-tui
+```
+
 From source:
 
 ```bash
@@ -86,3 +93,8 @@ bun dev
   - install dependencies with Bun
   - typecheck with `bunx tsc --noEmit`
 - Release workflow runs on `v*` tags and creates a GitHub Release.
+- NPM publish workflow runs on GitHub release publish (or manual dispatch) and publishes `openclaw-audit-tui`.
+
+### NPM publish setup
+
+Set repository secret `NPM_TOKEN` in GitHub Actions for `Sabrimjd/openclaw-audit-tui`.
