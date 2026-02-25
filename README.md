@@ -1,4 +1,18 @@
 # openclaw-audit-tui
+<div align="center">
+  <img src="screnshots/logo.png" width="200px" alt="Openclaw audit Tui" />
+  <h1 style="font-size: 28px; margin: 10px 0;">OpenClaw Audit TUI</h1>
+  <p>X-Ray Openclaw agents</p>
+</div>
+
+[![npm version](https://badge.fury.io/js/openclaw-audit-tui.svg)](https://badge.fury.io/js/openclaw-audit-tui)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub release](https://img.shields.io/github/release/Sabrimjd/openclaw-audit-tui.svg)](https://github.com/Sabrimjd/openclaw-audit-tui/releases)
+
+Monitor all OpenClaw session events and stream them to any channel (Discord, Telegram, Slack, etc.) in real-time.
+
+<img src="screnshots/screenshot3.png" width="200px" alt="Openclaw audit Tui" />
+
 
 Terminal UI for auditing OpenClaw sessions, events, tool usage, and model behavior.
 
