@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.1.6] - 2026-02-25
+
+### Fixed
+- Fixed global Bun install launcher path resolution by resolving symlinked `bin/openclaw-audit-tui` path before locating `src/index.tsx`.
+
 ## [0.1.5] - 2026-02-25
 
 ### Fixed
